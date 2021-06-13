@@ -1,0 +1,5 @@
+#! /bin/bash
+
+apt-get -y update
+apt-get install nginx
+git clone --depth 1 -b master https://github.com/cameron/prx
