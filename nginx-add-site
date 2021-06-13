@@ -1,0 +1,26 @@
+#! /bin/bash
+
+function help () {
+	echo "Creates an nginx site file mapping <subdomain>.nno.ooo to nno.ooo:<port>"
+	echo "Usage: $0 <subdomain> <port>"
+}
+
+if [[ -z $1 ]] || [[ -z $2 ]]; then
+	help()
+	exit 1
+fi
+
+
+onfig_path=/etc/nginx/sites-enabled/$1
+cat > $config_path) <<EOF
+server {
+  listen 80;
+  server_name $1.nno.ooo;
+
+  location / {
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_pass http://localhost:$2;
+  }
+}
+EOF

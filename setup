@@ -1,5 +1,32 @@
 #! /bin/bash
 
+
+# certbot w wildcard supportsna
+
+which snap
+if [[ $? == "1" ]]; then
+	 apt-get install snapd
+	 snap install core
+	 echo "no logout, back in, and and re-run"
+	 exit
+fi
+
+snap refresh core
+snap install --classic certbot
+ln -s /snap/bin/certbot /usr/bin/certbot
+snap set certbot trust-plugin-with-root=ok
+snap install certbot-dns-cloudflare
+
+# certbot certonly --dns-cloudflare --dns-cloudflare-credentials ./certbot-cloudflare.ini -d *.nno.ooo -m cameron.boehmer@gmail.com
+# 43 6 * * * certbot renew --post-hook "systemctl reload nginx"
+
 apt-get -y update
 apt-get install nginx
+
+mkdir -p /srv/
+cd /srv
 git clone --depth 1 -b master https://github.com/cameron/prx
+ln -s /srv/prx.service /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable prx
+systemctl start prx
