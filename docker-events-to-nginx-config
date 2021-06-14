@@ -1,5 +1,7 @@
 #! /bin/bash
 
+
+
 docker events | while read event; do
 	event_type=$(echo $event | awk '{print $3}')
 	echo $event_type | grep '\(kill\|stop\|start\|die\)' > /dev/null
@@ -9,20 +11,8 @@ docker events | while read event; do
   inspect=$(docker inspect --format '{{ .Config.Hostname }} {{ .NetworkSettings.Ports }}' $id)
 	subdomain=$(echo $inspect | awk '{print $1}')
 	port=$(echo $inspect | awk '{print $3}' | sed 's/[^0-9]//g')
-	config_path=/etc/nginx/sites-enabled/$subdomain
 	if [[ $event_type == "start" ]]; then
-	(cat > $config_path) <<EOF
-server {
-  listen 80;
-  server_name $subdomain.nno.ooo;
-
-  location / {
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_pass http://localhost:$port;
-  }
-}
-EOF
+		$(realpath $0)/nginx-add-site $subdomain $port
 	else
 		rm $config_path
 	fi

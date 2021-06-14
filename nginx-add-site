@@ -11,7 +11,7 @@ if [[ -z $1 ]] || [[ -z $2 ]]; then
 fi
 
 
-onfig_path=/etc/nginx/sites-enabled/$1
+config_path=/etc/nginx/sites-enabled/$1
 cat > $config_path) <<EOF
 server {
   listen 80;
