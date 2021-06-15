@@ -1,13 +1,12 @@
 #! /bin/bash
 
-
-# certbot w wildcard supportsna
+# certbot w wildcard support
 
 which snap
 if [[ $? == "1" ]]; then
 	 apt-get install snapd
 	 snap install core
-	 echo "no logout, back in, and and re-run"
+	 echo "Installed snap; to continue installation, log out and in again, and re-run"
 	 exit
 fi
 
