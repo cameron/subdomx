@@ -17,11 +17,13 @@ snap install certbot-dns-cloudflare
 apt-get -y update
 apt-get install nginx
 
+ln -s subdomx-add /usr/local/bin/
+
 certbot_creds=./certbot-cloudflare.ini
 if [[ -f $certbot_creds ]]; then
-	certbot certonly --dns-cloudflare --dns-cloudflare-credentials $cerbot_creds
+  certbot certonly --dns-cloudflare --dns-cloudflare-credentials $cerbot_creds
 	echo "And add the following to crontab: "
 	echo " 43 6 * * * certbot renew --post-hook 'systemctl reload nginx'"
 else
-	echo "$certbot_creds found; skipping SSL cert generation."
+	echo "$certbot_creds not found; skipping SSL cert generation."
 fi

@@ -1,5 +1,5 @@
 [Unit]
-Description=Dynamically map docker container ports to subdomains by container hostname via nginx
+Description=subdomx
 After=docker.service
 Requires=docker.service
 After=nginx.service
