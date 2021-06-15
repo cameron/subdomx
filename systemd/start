@@ -10,10 +10,8 @@ docker events | while read event; do
 	subdomain=$(echo $inspect | awk '{print $1}')
 	port=$(echo $inspect | awk '{print $3}' | sed 's/[^0-9]//g')
 	if [[ $event_type == "start" ]]; then
-		$(realpath $0)/../subdomx-add $subdomain $port
+		subdomx $subdomain $port
 	else
-		rm $config_path
+		subdomx -r $subdomain
 	fi
-
-	systemctl reload nginx
 done

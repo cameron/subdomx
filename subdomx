@@ -2,7 +2,9 @@
 
 function help () {
 	echo "Creates an nginx site file mapping <subdomain>.nno.ooo to nno.ooo:<port>"
-	echo "Usage: $0 <subdomain> <port>"
+	echo "Usage:
+$0 <subdomain> <port>\n
+$0 -r <subdomain>"
 }
 
 if [[ -z $1 ]] || [[ -z $2 ]]; then
@@ -10,9 +12,9 @@ if [[ -z $1 ]] || [[ -z $2 ]]; then
 	exit 1
 fi
 
-
-config_path=/etc/nginx/sites-enabled/$1
-cat > $config_path <<EOF
+sites_path=/etc/nginx/sites-enabled
+if [[ $1 != "-r" ]]; then
+	cat > $sites_path/$1 <<EOF
 server {
   listen 80;
   server_name $1.nno.ooo;
@@ -25,8 +27,8 @@ server {
   include /etc/letsencrypt/options-ssl-nginx.conf;
 
   # Redirect non-https traffic to https
-  if ($scheme != "https") {
-      return 301 https://$host$request_uri;
+  if (\$scheme != "https") {
+      return 301 https://\$host\$request_uri;
   }
 
   location / {
@@ -36,3 +38,8 @@ server {
   }
 }
 EOF
+else
+	rm $sites_path/$2
+fi
+
+systemctl reload nginx

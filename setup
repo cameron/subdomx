@@ -17,7 +17,8 @@ snap install certbot-dns-cloudflare
 apt-get -y update
 apt-get install nginx
 
-ln -s subdomx-add /usr/local/bin/
+path=$(realpath ./subdomx)
+ln -fs $path /usr/local/bin/subdomx
 
 certbot_creds=./certbot-cloudflare.ini
 if [[ -f $certbot_creds ]]; then
