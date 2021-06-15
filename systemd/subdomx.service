@@ -1,5 +1,5 @@
 [Unit]
-Description=Automatically configure nginx to map subdomains to docker container ports by container hostname
+Description=Dynamically map docker container ports to subdomains by container hostname via nginx
 After=docker.service
 Requires=docker.service
 After=nginx.service
@@ -7,9 +7,9 @@ Requires=nginx.service
 
 [Service]
 Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-WorkingDirectory=/srv/prx
+WorkingDirectory=/srv/subdomx
 TimeoutStartSec=5min
-ExecStart=/srv/prx/docker-events-to-nginx-config
+ExecStart=/srv/subdomx/systemd/start
 Restart=always
 
 [Install]

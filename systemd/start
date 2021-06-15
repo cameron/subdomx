@@ -1,7 +1,5 @@
 #! /bin/bash
 
-
-
 docker events | while read event; do
 	event_type=$(echo $event | awk '{print $3}')
 	echo $event_type | grep '\(kill\|stop\|start\|die\)' > /dev/null
@@ -12,7 +10,7 @@ docker events | while read event; do
 	subdomain=$(echo $inspect | awk '{print $1}')
 	port=$(echo $inspect | awk '{print $3}' | sed 's/[^0-9]//g')
 	if [[ $event_type == "start" ]]; then
-		$(realpath $0)/nginx-add-site $subdomain $port
+		$(realpath $0)/../subdomx-add $subdomain $port
 	else
 		rm $config_path
 	fi
