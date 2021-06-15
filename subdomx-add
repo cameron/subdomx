@@ -6,20 +6,32 @@ function help () {
 }
 
 if [[ -z $1 ]] || [[ -z $2 ]]; then
-	help()
+	help
 	exit 1
 fi
 
 
 config_path=/etc/nginx/sites-enabled/$1
-cat > $config_path) <<EOF
+cat > $config_path <<EOF
 server {
   listen 80;
   server_name $1.nno.ooo;
 
+  listen 443 ssl;
+
+  ssl_certificate /etc/letsencrypt/live/nno.ooo/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/nno.ooo/privkey.pem;
+
+  include /etc/letsencrypt/options-ssl-nginx.conf;
+
+  # Redirect non-https traffic to https
+  if ($scheme != "https") {
+      return 301 https://$host$request_uri;
+  }
+
   location / {
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header Host \$host;
+    proxy_set_header X-Real-IP \$remote_addr;
     proxy_pass http://localhost:$2;
   }
 }
