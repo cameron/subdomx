@@ -1,3 +1,3 @@
 # subdomx
 
-Dynamically map docker container ports to subdomains by container hostname with nginx's proxy_pass
+Dynamically map subdomains to local port by docker container hostname with nginx's proxy_pass
